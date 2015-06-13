@@ -27,7 +27,7 @@ The variables included in this dataset are:
 
 
 ```r
-  opts_chunk$set(echo=TRUE, results='hide')
+  opts_chunk$set(echo=TRUE, results='show')
 ```
 
 

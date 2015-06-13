@@ -26,7 +26,7 @@ The variables included in this dataset are:
 ### Loading and preprocessing the data  
 
 ```{r setoptions, echo=TRUE}
-  opts_chunk$set(echo=TRUE, results='hide')
+  opts_chunk$set(echo=TRUE, results='show')
 ```
 
 
