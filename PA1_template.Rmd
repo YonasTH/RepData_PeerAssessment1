@@ -24,15 +24,15 @@ The variables included in this dataset are:
     measurement was taken 
           
 ### Loading and preprocessing the data  
-
-```{r setoptions, echo=TRUE}
-  opts_chunk$set(echo=TRUE, results='show')
+```{r echo=FALSE}
+options(scipen=1, digits=2)
+library(knitr)
+opts_chunk$set(echo=TRUE, results='hide')
 ```
-
-
 ```{r}
-activity <- read.csv(unzip("RepData_PeerAssessment1/activity.zip", exdir="."))
+activity <- read.csv(unzip("activity.zip", exdir="."))
 ```
+
 
 ### What is mean total number of steps taken per day?
 
@@ -43,24 +43,26 @@ library(plyr)
 StepsPerDay <- ddply(complete, ~date, summarise, total=sum(steps), mean=mean(steps), sd=sd(steps))
 ```
 The first few total, mean, and sd values are shown below    
-```{r results = 'asis'}
+```{r echo=FALSE, results='markup'}
 head(StepsPerDay)
 ```
-1. A histogram can be produced as follows  
+ 
+
+1. A histogram can be produced as follows   
 ```{r results = 'asis'}
-hist(StepsPerDay$total, col="red", xlab="Total steps per day")
+hist(StepsPerDay$total, col="red", main="Histogram of Total Steps per Day", xlab="Total steps per day")
 ```
 
-2. Calculate and report the **mean** and **median** total number of steps taken per day
-```{r}
+2.  Calculate and report the **mean** and **median** total number of steps taken per day  
+```{r echo =TRUE}
 MEAN <- mean(StepsPerDay$total)
 MEDIAN <- median(StepsPerDay$total)  
 ```
-The mean and median are `MEAN` and `MEDIAN`, respectively  
+The mean and median are **`r MEAN`** and **`r MEDIAN`**, respectively  
 
 ### What is the average daily activity pattern?
 
-1. Time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis) is prepared as shown below  
+1. Time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all days (y-axis) is prepared as shown below  
 
 ```{r results='asis'}
 complete <- activity[complete.cases(activity$steps),]
@@ -75,11 +77,11 @@ StepsPerInterval$interval[StepsPerInterval$mean==max(StepsPerInterval$mean)]
 
 ### Strategically replacing missing values
 
-1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with `NA`s)  
+1. Calculate and report the total number of missing values in the dataset (i.e. the total number of rows with NAs)  
 ```{r results='as.is'}
 Number_NA <- sum(is.na(activity))
 ```
-The number of NA's is `Number_NA`  
+The number of NA's is **`r Number_NA`**  
 
 2. Devise a strategy for filling in all of the missing values in the dataset.  
 NA values in a given interval are replaced by the average number of steps in that interval  
@@ -97,7 +99,7 @@ for (i in 1:nrow(activity_new)) {
 
 3. A new data set activity_new is created from the data set activity by replacing NA's as shown above.  
 Shown below is the first few rows of the new data set
-```{r results='asis'}
+```{r results='markup'}
 head(activity_new)
 ```
 
@@ -106,21 +108,21 @@ head(activity_new)
 The following code chunk is used to produce the histogram
 ```{r results='asis'}
 new_StepsPerDay <- ddply(activity_new, ~date, summarise, total=sum(steps), mean=mean(steps), sd=sd(steps))
-hist(new_StepsPerDay$total, col="red", xlab="Total steps per day")
+hist(new_StepsPerDay$total, col="red", main="Histogram of Total Steps per Day", xlab="Total steps per day")
 ```
 
 ```{r results='asis'}
 MEAN1 <- mean(new_StepsPerDay$total)
 MEDIAN1 <- median(new_StepsPerDay$total)
 ```
-The new mean and meadian are `MEAN1` and 'MEDIAN1`, respectively  
+The new mean and meadian are **`r MEAN1`** and **`r MEDIAN1`**, respectively  
 The global mean and median are relatively the same between the two datasets. But it can be seen from the two  
 histograms that the mean and median for each day vary depending on the presence or absence of NA values
 
 
 ### Are there differences in activity patterns between weekdays and weekends?
 
-1. Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
+1.  Create a new factor variable in the dataset with two levels -- "weekday" and "weekend" indicating whether a given date is a weekday or weekend day.
 ```{r}
 day <- weekdays(as.Date(activity_new$date))
 dayType <- vector()
@@ -133,7 +135,7 @@ for (i in 1:nrow(activity_new)) {
 }
 ```
 
-2. Make a panel plot containing a time series plot (i.e. `type = "l"`) of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
+2. Make a panel plot containing a time series plot of the 5-minute interval (x-axis) and the average number of steps taken, averaged across all weekday days or weekend days (y-axis). 
 
 ```{r results='asis'}
 activity_new$dayType <- factor(dayType)
